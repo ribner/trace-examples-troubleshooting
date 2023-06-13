@@ -1,0 +1,11 @@
+source 'https://rubygems.org'
+
+# branch with MongoDB Ruby Driver instrumentation
+gem 'ddtrace'
+gem 'mongoid'
+
+# rails gems
+gem 'rails'
+
+# application server
+gem 'unicorn'

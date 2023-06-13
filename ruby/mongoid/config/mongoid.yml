@@ -1,0 +1,7 @@
+# default Mongoid configuration
+development:
+  clients:
+    default:
+      database: mongoid_app
+      hosts:
+        - mongodb:27017

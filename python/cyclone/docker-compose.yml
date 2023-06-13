@@ -1,0 +1,45 @@
+version: '3'
+services:
+  datadog-agent:
+    image: datadog/agent:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+    ports:
+      - 127.0.0.1:8126:8126/tcp
+    environment:
+      - DD_API_KEY=${DD_API_KEY}
+      - DD_APM_ENABLED=true
+      - DD_APM_NON_LOCAL_TRAFFIC=true
+      - DD_LOG_LEVEL=INFO
+      - DD_DOGSTATSD_NON_LOCAL_TRAFFIC=true
+      - DD_AC_EXCLUDE=name:datadog-agent
+  web:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - 127.0.0.1:8888:8888/tcp
+    env_file:
+      .env
+    environment:
+      - DD_AGENT_HOST=datadog-agent
+      - PORT=8888
+    depends_on:
+      - datadog-agent
+      - mysql
+      - redis
+  mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_PASSWORD=test
+      - MYSQL_USER=test
+      - MYSQL_DATABASE=test
+    ports:
+      - "127.0.0.1:3306:3306"
+  redis:
+    image: redis:4.0-alpine
+    ports:
+      - "127.0.0.1:6379:6379"

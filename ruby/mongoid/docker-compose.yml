@@ -1,0 +1,21 @@
+version: '3.2'
+services:
+  mongodb:
+    image: mongo:4.1
+    volumes:
+      - ./db/data:/data/db
+  datadog:
+    image: datadog/agent
+    environment:
+      - DD_APM_ENABLED=true
+      - DD_BIND_HOST=0.0.0.0
+      - DD_API_KEY
+  web:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      - mongodb
+      - datadog

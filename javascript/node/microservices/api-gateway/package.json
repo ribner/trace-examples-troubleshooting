@@ -1,0 +1,15 @@
+{
+  "name": "api-gateway",
+  "version": "1.0.0",
+  "main": "server.js",
+  "private": true,
+  "dependencies": {
+    "@gamechanger/datadog-apm": "^1.1.4",
+    "axios": "^0.18.0",
+    "cors": "^2.8.5",
+    "dd-trace": "^4.1.1",
+    "express": "^4.16.2",
+    "express-winston": "^3.0.1",
+    "winston": "^3.2.1"
+  }
+}

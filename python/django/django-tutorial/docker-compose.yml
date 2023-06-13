@@ -1,0 +1,31 @@
+version: '3'
+services:
+  app:
+    depends_on:
+      - agent
+      - db
+    build: .
+    command: ddtrace-run python manage.py runserver 0.0.0.0:8000
+    environment:
+      - 'DD_TRACE_AGENT_HOSTNAME=agent'
+      - 'DD_TRACE_DEBUG=true'
+    ports:
+      - '8000:8000'
+
+  db:
+    image: postgres
+    environment:
+      - 'POSTGRES_HOST_AUTH_METHOD=trust'
+
+  agent:
+    image: 'datadog/agent'
+    environment:
+      - 'DD_API_KEY=${DD_API_KEY}'
+      - 'DD_APM_ENABLED=true'
+    ports:
+      - 8125
+      - 8126
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+      - '/proc/:/host/proc/:ro'
+      - '/sys/fs/cgroup/:/host/sys/fs/cgroup:ro'
